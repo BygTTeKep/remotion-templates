@@ -1,16 +1,15 @@
 // Адаптация templates/countdown-intro.tsx: финальное слово — пропсом, отсчёт — 3 секунды + GO в конце слота.
 // Источник: https://github.com/reactvideoeditor/remotion-templates (MIT).
 import { interpolate, spring, useCurrentFrame, useVideoConfig } from 'remotion';
-import type { CardTemplateProps } from '../../lib/props.js';
 
 const clamp = { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' } as const;
 
-export const CountdownIntro: React.FC<
-  CardTemplateProps & {
-    // слово после отсчёта («GO!» в оригинале)
-    goText?: string;
-  }
-> = ({ goText = 'GO!', accentColor = '#3b82f6', backgroundColor = '#111827' }) => {
+export const CountdownIntro: React.FC<{
+  // слово после отсчёта («GO!» в оригинале)
+  goText?: string;
+  accentColor?: string;
+  backgroundColor?: string;
+}> = ({ goText = 'GO!', accentColor = '#3b82f6', backgroundColor = '#111827' }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
