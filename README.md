@@ -1,5 +1,54 @@
 # Remotion Templates by RVE
 
+## Интеграция с AiDreamsStudio (пакет `@aidreams/remotion-templates`)
+
+Этот форк — часть экосистемы AiDreamsStudio: каталог стилей для автомонтажа
+(`AiDreamsStudioAutoMontage`). Каталог `templates/` ниже — исходники-демо upstream
+(английский, контент и длительности захардкожены). Адаптированные для монтажа
+компоненты лежат в `src/`:
+
+- **Text** (9): `AnimatedText`, `BounceText`, `BubblePopText`, `FloatingBubbleText`,
+  `GlitchText`, `PoppingText`, `PulsingText`, `SlideText`, `TypewriterSubtitle` —
+  текстовые плашки/титры, прозрачный фон (оверлеи поверх видео).
+- **Intro & Outro** (9): `ChapterTitle`, `CinematicTitleIntro`, `CountdownIntro`,
+  `CreditsRoll`, `EndCard`, `LowerThird`, `QuoteCard`, `SubscribeReminder`,
+  `TitleSplit` — полноэкранные карточки (`SubscribeReminder` и `LowerThird` могут
+  работать и как оверлеи).
+
+Конвенции адаптации (отличия от исходников в `templates/`):
+
+- контент пропсами: `text`, `subtext`, `accentColor`, `fontSize`, `backgroundColor`;
+- длительность — из `useVideoConfig().durationInFrames` родительского `<Sequence>`,
+  шаблон оборачивают так: `<Sequence durationInFrames={...}><AnimatedText text="…" /></Sequence>`;
+- детерминизм: никакого `Math.random()` (заменён на `noise(seed, frame)` из `src/lib/random.ts`),
+  CSS-анимации заменены на повороты/интерполяции от кадра;
+- шрифты пакет не грузит — наследуются от контейнера; потребитель грузит свои
+  через `@remotion/fonts` (в AiDreamsStudioAutoMontage — Montserrat с кириллицей).
+
+Сборка и публикация как git-зависимости:
+
+```bash
+npm run typecheck   # проверка типов
+npm run build       # dist/ (js + d.ts); гоняется автоматически через prepare при установке
+```
+
+Подключение в `AiDreamsStudioAutoMontage`:
+
+```json
+"dependencies": {
+  "@aidreams/remotion-templates": "github:BygTTeKep/AiDreamsStudioRemotionTemplates"
+}
+```
+
+Регистрация нового шаблона в монтаже — в `AiDreamsStudioAutoMontage`: значение в enum
+каталога (`schema.ts` + синхронно enum'ы в Go `internal/montage`), маппинг в
+`Overlays`/композиции. Категории, ещё не адаптированные (Cinematic, Background,
+Transitions, Logo, Content Animation, Media, Charts) — будущие батчи по той же схеме.
+
+---
+
+## Upstream README
+
 A collection of 81 free, ready-to-use Remotion templates for creating programmatic videos with React. Each template is a self-contained React component that uses Remotion hooks (`useCurrentFrame`, `interpolate`, `spring`, `useVideoConfig`) — no CSS keyframes or external animation libraries.
 
 ## Live Demos
